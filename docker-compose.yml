@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  lld:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: lld-python
+    volumes:
+      # Mount the entire project directory for development
+      - .:/app
+    working_dir: /app
+    environment:
+      - PYTHONUNBUFFERED=1
+    stdin_open: true
+    tty: true
+    command: /bin/bash
+    depends_on:
+      - mongo
+
+  mongo:
+    image: mongo:5.0
+    container_name: lld-mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    environment:
+      - MONGO_INITDB_DATABASE=hospital_db
+
+volumes:
+  mongo_data:
